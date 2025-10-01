@@ -110,7 +110,7 @@ with col1:
     st.markdown('<div class="teddy-container">', unsafe_allow_html=True)
     # Imagen del peluche gigante (URL estable y gratuita)
     st.image("https://www.freeiconspng.com/thumbs/teddy-bear-png/teddy-bear-png-0.png", 
-             caption="¡Hola! Soy Osito Amigo 🧸", 
+             caption="¡Hola! Soy tu Peluche IA 🧸", 
              use_column_width=True, 
              output_format="PNG")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -118,7 +118,7 @@ with col1:
     st.markdown("**¡Estoy aquí para escucharte y jugar contigo!** 💕")
 
 with col2:
-    st.title("🧸 Tu Amigo Virtual de Compañía")
+    st.title("🧸 Tu Peluche IA de Compañía")
 
 API_KEY = "AIzaSyAzpQw6qxWMmXx_XMIMv3OABU5ZMvPzfUw"
 try:
