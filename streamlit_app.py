@@ -9,6 +9,7 @@ st.set_page_config(page_title="🧸 Peluche IA", page_icon="🧸", layout="wide"
 
 # Custom CSS for a minimalist, child-friendly design
 # Custom CSS for a minimalist, child-friendly design
+# Custom CSS for a minimalist, child-friendly design
 st.markdown("""
 <style>
     body {
@@ -102,6 +103,7 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 # Crear columnas para layout: peluche a la izquierda, chat a la derecha
