@@ -2,7 +2,6 @@ import streamlit as st
 import google.generativeai as genai
 from gtts import gTTS
 import io, base64
-from pydub import AudioSegment
 
 # ================== Configuración general ==================
 st.set_page_config(page_title="🧸 Peluche IA", page_icon="🧸")
@@ -73,25 +72,14 @@ if user_input:
                 st.session_state.messages.append({"role": "assistant", "content": answer})
                 st.markdown(answer)
 
-                # --- TTS ---
-                tts = gTTS(answer, lang="es")
+                # --- TTS sin ffmpeg ---
+                # slow=False da la velocidad normal (más rápida que slow=True)
+                tts = gTTS(answer, lang="es", slow=False)
                 audio_bytes = io.BytesIO()
                 tts.write_to_fp(audio_bytes)
+                audio_bytes = audio_bytes.getvalue()
 
-                # Volver a abrir con pydub
-                audio_bytes.seek(0)
-                sound = AudioSegment.from_file(audio_bytes, format="mp3")
-
-                # Aumentar velocidad (ej: 1.3x)
-                faster_sound = sound._spawn(sound.raw_data, overrides={
-                    "frame_rate": int(sound.frame_rate * 1.3)
-                }).set_frame_rate(sound.frame_rate)
-
-                out_bytes = io.BytesIO()
-                faster_sound.export(out_bytes, format="mp3")
-                audio_data = out_bytes.getvalue()
-
-                b64 = base64.b64encode(audio_data).decode()
+                b64 = base64.b64encode(audio_bytes).decode()
                 audio_html = f"""
                     <audio autoplay="true">
                         <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
