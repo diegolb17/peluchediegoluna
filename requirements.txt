@@ -4,3 +4,4 @@ speechrecognition
 google-generativeai>=0.7.2
 gTTS
 pydub
+ffmpeg-python
