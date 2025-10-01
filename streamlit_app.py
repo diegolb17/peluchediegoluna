@@ -5,51 +5,55 @@ import io, base64
 from pydub import AudioSegment
 
 # ================== Configuración general ==================
-st.set_page_config(page_title="🧸 Peluche IA", page_icon="🧸", layout="centered")
+st.set_page_config(page_title="🧸 Peluche IA", page_icon="🧸", layout="wide")  # Cambié a 'wide' para mejor espacio al peluche
 
 # Custom CSS for a minimalist, child-friendly design
 st.markdown("""
 <style>
     body {
-        background-color: #F0F4F8;
-        font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+        background: linear-gradient(135deg, #F0F8FF 0%, #FFF0F5 100%);
+        font-family: 'Comic Sans MS', cursive, sans-serif;
     }
     .main {
         background-color: #FFFFFF;
-        border-radius: 20px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 700px;
+        border-radius: 25px;
+        padding: 25px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        max-width: 900px;
         margin: auto;
     }
     h1 {
         color: #FF9999;
         text-align: center;
-        font-size: 2.5em;
-        margin-bottom: 20px;
+        font-size: 2.8em;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(255, 153, 153, 0.3);
     }
     .stTextInput > div > div > input {
         background-color: #E6F3FA;
-        border: 2px solid #A3D8F4;
-        border-radius: 15px;
-        padding: 10px;
-        font-size: 1.2em;
+        border: 3px solid #A3D8F4;
+        border-radius: 20px;
+        padding: 12px;
+        font-size: 1.3em;
         color: #333;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .stTextInput > div > div > input:focus {
         border-color: #FF9999;
-        box-shadow: 0 0 5px rgba(255, 153, 153, 0.5);
+        box-shadow: 0 0 8px rgba(255, 153, 153, 0.6);
     }
     .stChatInput {
         background-color: #FFF5E6;
-        border: 2px solid #FFDAB9;
-        border-radius: 15px;
-        padding: 10px;
+        border: 3px solid #FFDAB9;
+        border-radius: 20px;
+        padding: 12px;
+        margin-top: 10px;
     }
     .stChatMessage {
-        border-radius: 15px;
-        margin: 10px 0;
-        padding: 15px;
+        border-radius: 20px;
+        margin: 12px 0;
+        padding: 18px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
     .stChatMessage[data-testid="user"] {
         background-color: #E6F3FA;
@@ -61,29 +65,60 @@ st.markdown("""
     }
     .stSpinner > div > div {
         color: #FF9999;
+        font-size: 1.2em;
+    }
+    .stInfo {
+        background-color: #E6FFE6;
+        border: 2px solid #90EE90;
+        border-radius: 15px;
+        padding: 15px;
+        color: #006400;
+    }
+    .stError {
+        background-color: #FFE6E6;
+        border: 2px solid #FFB6C1;
+        border-radius: 15px;
+        padding: 15px;
+        color: #8B0000;
+    }
+    .teddy-container {
+        text-align: center;
+        margin: 20px 0;
     }
     .teddy-image {
-        display: block;
-        margin: 20px auto;
-        max-width: 200px;
-        animation: bounce 2s infinite;
+        max-width: 250px;
+        height: auto;
+        border-radius: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        animation: bounce 2s infinite ease-in-out;
     }
     @keyframes bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(2deg); }
+    }
+    /* Sidebar o columna para el peluche si usas columnas */
+    .stSidebar {
+        background-color: #F0F8FF;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Giant teddy bear image (using a free, child-friendly teddy bear image URL)
-st.image("https://banner2.cleanpng.com/20230819/lxw/transparent-teddy-bear-1711090681302.webp", 
-         caption="¡Osito Amigo está aquí para ti!", 
-         use_column_width=False, 
-         width=200, 
-         output_format="PNG",
-         cls="teddy-image")
+# Crear columnas para layout: peluche a la izquierda, chat a la derecha
+col1, col2 = st.columns([1, 2])
 
-st.title("🧸 Tu Amigo Virtual de Compañía")
+with col1:
+    st.markdown('<div class="teddy-container">', unsafe_allow_html=True)
+    # Imagen del peluche gigante (URL estable y gratuita)
+    st.image("https://www.freeiconspng.com/thumbs/teddy-bear-png/teddy-bear-png-0.png", 
+             caption="¡Hola! Soy Osito Amigo 🧸", 
+             use_column_width=True, 
+             output_format="PNG")
+    st.markdown('</div>', unsafe_allow_html=True)
+    # Agregar un mensaje juguetón debajo del peluche
+    st.markdown("**¡Estoy aquí para escucharte y jugar contigo!** 💕")
+
+with col2:
+    st.title("🧸 Tu Amigo Virtual de Compañía")
 
 API_KEY = "AIzaSyAzpQw6qxWMmXx_XMIMv3OABU5ZMvPzfUw"
 try:
@@ -100,7 +135,7 @@ if "child_name" not in st.session_state:
 st.session_state.child_name = st.text_input(
     "👦💬 Escribe tu nombre para que el peluche te llame por él:",
     value=st.session_state.child_name,
-    placeholder="Tu nombre aquí..."
+    placeholder="Tu nombre aquí... 😊"
 )
 
 if not st.session_state.child_name.strip():
@@ -126,7 +161,7 @@ ROLE_PROMPT = (
 )
 
 # ===== Entrada de texto =====
-user_input = st.chat_input(f"Escribe aquí lo que quieras contarme, {st.session_state.child_name}...")
+user_input = st.chat_input(f"Escribe aquí lo que quieras contarme, {st.session_state.child_name}... 💭")
 
 # ===== Procesar conversación =====
 if user_input:
@@ -137,7 +172,7 @@ if user_input:
 
     # Respuesta del peluche IA
     with st.chat_message("assistant"):
-        with st.spinner("⏳ Pensando..."):
+        with st.spinner("⏳ Pensando... ¡Osito está escuchando!"):
             try:
                 history_text = "\n".join(
                     [f"{m['role'].capitalize()}: {m['content']}" for m in st.session_state.messages]
