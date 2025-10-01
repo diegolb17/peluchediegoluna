@@ -106,22 +106,22 @@ st.markdown("""
 
 
 
-# Crear columnas para layout: peluche a la izquierda, chat a la derecha
-col1, col2 = st.columns([1, 2])
+# ==== Encabezado y peluche centrados (reemplaza el bloque de columnas) ====
+st.markdown("<h1 style='text-align:center; margin-top: 6px;'>🧸 Tu Peluche IA de Compañía</h1>", unsafe_allow_html=True)
 
-with col1:
-    st.markdown('<div class="teddy-container">', unsafe_allow_html=True)
-    # Imagen del peluche gigante (URL estable y gratuita)
-    st.image("https://www.freeiconspng.com/thumbs/teddy-bear-png/teddy-bear-png-0.png", 
-             caption="¡Hola! Soy tu Peluche IA 🧸", 
-             use_column_width=True, 
-             output_format="PNG")
-    st.markdown('</div>', unsafe_allow_html=True)
-    # Agregar un mensaje juguetón debajo del peluche
-    st.markdown("**¡Estoy aquí para escucharte y jugar contigo!** 💕")
+mid_l, mid_c, mid_r = st.columns([1, 1, 1])
+with mid_c:
+    st.image(
+        "https://www.freeiconspng.com/thumbs/teddy-bear-png/teddy-bear-png-0.png",
+        use_container_width=False,  # reemplaza use_column_width (deprecado)
+        width=420,
+        output_format="PNG"
+    )
+    st.caption("¡Hola! Soy tu Peluche IA 🧸")
+    st.markdown("<p style='text-align:center; font-weight:700; color:#444;'>¡Estoy aquí para escucharte y jugar contigo! 💕</p>",
+                unsafe_allow_html=True)
+# ==== fin encabezado centrado ====
 
-with col2:
-    st.title("🧸 Tu Peluche IA de Compañía")
 
 API_KEY = "AIzaSyAzpQw6qxWMmXx_XMIMv3OABU5ZMvPzfUw"
 try:
