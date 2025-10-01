@@ -1,17 +1,15 @@
 import streamlit as st
 import google.generativeai as genai
 from gtts import gTTS
-import io
-import base64
+import io, base64
+from pydub import AudioSegment
 
 # ================== Configuración general ==================
 st.set_page_config(page_title="🧸 Peluche IA", page_icon="🧸")
 st.title("🧸 Tu Amigo Virtual de Compañía")
 
-# 🔐 Clave API
 API_KEY = "AIzaSyAzpQw6qxWMmXx_XMIMv3OABU5ZMvPzfUw"
 
-# Configurar Gemini
 try:
     genai.configure(api_key=API_KEY)
     model_chat = genai.GenerativeModel("gemini-2.0-flash")
@@ -64,7 +62,6 @@ if user_input:
     with st.chat_message("assistant"):
         with st.spinner("⏳ Pensando..."):
             try:
-                # Construir el contexto: rol + historial
                 history_text = "\n".join(
                     [f"{m['role'].capitalize()}: {m['content']}" for m in st.session_state.messages]
                 )
@@ -73,17 +70,28 @@ if user_input:
                 resp = model_chat.generate_content(full_prompt)
                 answer = (getattr(resp, "text", "") or "").strip() or "No entendí bien, ¿me cuentas otra vez?"
 
-                # Guardar y mostrar
                 st.session_state.messages.append({"role": "assistant", "content": answer})
                 st.markdown(answer)
 
-                # Convertir a voz automáticamente
+                # --- TTS ---
                 tts = gTTS(answer, lang="es")
                 audio_bytes = io.BytesIO()
                 tts.write_to_fp(audio_bytes)
-                audio_bytes = audio_bytes.getvalue()
 
-                b64 = base64.b64encode(audio_bytes).decode()
+                # Volver a abrir con pydub
+                audio_bytes.seek(0)
+                sound = AudioSegment.from_file(audio_bytes, format="mp3")
+
+                # Aumentar velocidad (ej: 1.3x)
+                faster_sound = sound._spawn(sound.raw_data, overrides={
+                    "frame_rate": int(sound.frame_rate * 1.3)
+                }).set_frame_rate(sound.frame_rate)
+
+                out_bytes = io.BytesIO()
+                faster_sound.export(out_bytes, format="mp3")
+                audio_data = out_bytes.getvalue()
+
+                b64 = base64.b64encode(audio_data).decode()
                 audio_html = f"""
                     <audio autoplay="true">
                         <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
