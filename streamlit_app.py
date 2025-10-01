@@ -76,7 +76,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Giant teddy bear image (using a free, child-friendly teddy bear image URL)
-st.image("https://www.pngall.com/wp-content/uploads/5/Teddy-Bear-PNG-Image.png", 
+st.image("https://banner2.cleanpng.com/20230819/lxw/transparent-teddy-bear-1711090681302.webp", 
          caption="¡Osito Amigo está aquí para ti!", 
          use_column_width=False, 
          width=200, 
