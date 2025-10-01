@@ -112,7 +112,7 @@ st.markdown("<h1 style='text-align:center; margin-top: 6px;'>🧸 Tu Peluche IA 
 mid_l, mid_c, mid_r = st.columns([1, 1, 1])
 with mid_c:
     st.image(
-        "https://www.freeiconspng.com/thumbs/teddy-bear-png/teddy-bear-png-0.png",
+        "https://ibb.co/7tTz7qC3",
         use_container_width=False,  # reemplaza use_column_width (deprecado)
         width=420,
         output_format="PNG"
