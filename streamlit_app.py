@@ -8,17 +8,18 @@ from pydub import AudioSegment
 st.set_page_config(page_title="🧸 Peluche IA", page_icon="🧸", layout="wide")  # Cambié a 'wide' para mejor espacio al peluche
 
 # Custom CSS for a minimalist, child-friendly design
+# Custom CSS for a minimalist, child-friendly design
 st.markdown("""
 <style>
     body {
-        background: linear-gradient(135deg, #F0F8FF 0%, #FFF0F5 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #FFFDF7 100%);
         font-family: 'Comic Sans MS', cursive, sans-serif;
     }
     .main {
         background-color: #FFFFFF;
         border-radius: 25px;
         padding: 25px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
         max-width: 900px;
         margin: auto;
     }
@@ -27,24 +28,24 @@ st.markdown("""
         text-align: center;
         font-size: 2.8em;
         margin-bottom: 15px;
-        text-shadow: 2px 2px 4px rgba(255, 153, 153, 0.3);
+        text-shadow: 2px 2px 4px rgba(255, 153, 153, 0.25);
     }
     .stTextInput > div > div > input {
-        background-color: #E6F3FA;
-        border: 3px solid #A3D8F4;
+        background-color: #F9FBFF;
+        border: 3px solid #CDE9FF;
         border-radius: 20px;
         padding: 12px;
         font-size: 1.3em;
         color: #333;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
     }
     .stTextInput > div > div > input:focus {
-        border-color: #FF9999;
-        box-shadow: 0 0 8px rgba(255, 153, 153, 0.6);
+        border-color: #FFB6C1;
+        box-shadow: 0 0 8px rgba(255, 182, 193, 0.5);
     }
     .stChatInput {
-        background-color: #FFF5E6;
-        border: 3px solid #FFDAB9;
+        background-color: #FFFDF7;
+        border: 3px solid #FFEFD5;
         border-radius: 20px;
         padding: 12px;
         margin-top: 10px;
@@ -53,29 +54,29 @@ st.markdown("""
         border-radius: 20px;
         margin: 12px 0;
         padding: 18px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
     .stChatMessage[data-testid="user"] {
-        background-color: #E6F3FA;
-        border: 2px solid #A3D8F4;
+        background-color: #F0FAFF;
+        border: 2px solid #CDE9FF;
     }
     .stChatMessage[data-testid="assistant"] {
-        background-color: #FFF5E6;
-        border: 2px solid #FFDAB9;
+        background-color: #FFF9F0;
+        border: 2px solid #FFEFD5;
     }
     .stSpinner > div > div {
         color: #FF9999;
         font-size: 1.2em;
     }
     .stInfo {
-        background-color: #E6FFE6;
-        border: 2px solid #90EE90;
+        background-color: #F0FFF0;
+        border: 2px solid #B5E3B5;
         border-radius: 15px;
         padding: 15px;
-        color: #006400;
+        color: #2E8B57;
     }
     .stError {
-        background-color: #FFE6E6;
+        background-color: #FFF0F0;
         border: 2px solid #FFB6C1;
         border-radius: 15px;
         padding: 15px;
@@ -89,19 +90,19 @@ st.markdown("""
         max-width: 250px;
         height: auto;
         border-radius: 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         animation: bounce 2s infinite ease-in-out;
     }
     @keyframes bounce {
         0%, 100% { transform: translateY(0) rotate(0deg); }
-        50% { transform: translateY(-15px) rotate(2deg); }
+        50% { transform: translateY(-12px) rotate(1deg); }
     }
-    /* Sidebar o columna para el peluche si usas columnas */
     .stSidebar {
-        background-color: #F0F8FF;
+        background-color: #FFFFFF;
     }
 </style>
 """, unsafe_allow_html=True)
+
 
 # Crear columnas para layout: peluche a la izquierda, chat a la derecha
 col1, col2 = st.columns([1, 2])
