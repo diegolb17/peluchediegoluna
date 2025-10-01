@@ -23,8 +23,10 @@ except Exception as e:
 if "child_name" not in st.session_state:
     st.session_state.child_name = ""
 
-st.session_state.child_name = st.text_input("👦💬 Escribe tu nombre para que el peluche te llame por él:", 
-                                            value=st.session_state.child_name)
+st.session_state.child_name = st.text_input(
+    "👦💬 Escribe tu nombre para que el peluche te llame por él:",
+    value=st.session_state.child_name
+)
 
 if not st.session_state.child_name.strip():
     st.info("Por favor escribe tu nombre arriba para comenzar 🧸")
@@ -32,23 +34,21 @@ if not st.session_state.child_name.strip():
 
 # ===== Historial =====
 if "messages" not in st.session_state:
-    # Instrucción inicial al modelo
-    st.session_state.messages = [{
-        "role": "system",
-        "content": (
-            f"Eres un peluche virtual llamado Osito Amigo. "
-            f"Tu misión es acompañar, escuchar y dar apoyo emocional a niños. "
-            f"Habla con ternura, sencillez y comprensión, como un amigo peluche. "
-            f"Siempre llama al niño por su nombre: {st.session_state.child_name}. "
-            f"Usa frases cortas, sin usar negritas, asteriscos ni símbolos extra. "
-            f"Tu objetivo es que el niño se sienta comprendido y acompañado."
-        )
-    }]
+    st.session_state.messages = []
 
 for m in st.session_state.messages:
-    if m["role"] != "system":  # no mostrar instrucciones ocultas
-        with st.chat_message(m["role"]):
-            st.markdown(m["content"])
+    with st.chat_message(m["role"]):
+        st.markdown(m["content"])
+
+# ===== Prompt base =====
+ROLE_PROMPT = (
+    f"Eres un peluche virtual llamado Osito Amigo. "
+    f"Tu misión es acompañar, escuchar y dar apoyo emocional a niños. "
+    f"Habla con ternura, sencillez y comprensión, como un amigo peluche. "
+    f"Siempre llama al niño por su nombre: {st.session_state.child_name}. "
+    f"No uses negritas ni asteriscos. "
+    f"Tu objetivo es que el niño se sienta comprendido y acompañado."
+)
 
 # ===== Entrada de texto =====
 user_input = st.chat_input(f"Escribe aquí lo que quieras contarme, {st.session_state.child_name}...")
@@ -64,9 +64,13 @@ if user_input:
     with st.chat_message("assistant"):
         with st.spinner("⏳ Pensando..."):
             try:
-                # Pasamos TODO el historial al modelo para coherencia
-                prompt = [ {"role": m["role"], "parts": [m["content"]]} for m in st.session_state.messages ]
-                resp = model_chat.generate_content(prompt)
+                # Construir el contexto: rol + historial
+                history_text = "\n".join(
+                    [f"{m['role'].capitalize()}: {m['content']}" for m in st.session_state.messages]
+                )
+                full_prompt = ROLE_PROMPT + "\n\n" + history_text + "\nAssistant:"
+
+                resp = model_chat.generate_content(full_prompt)
                 answer = (getattr(resp, "text", "") or "").strip() or "No entendí bien, ¿me cuentas otra vez?"
 
                 # Guardar y mostrar
